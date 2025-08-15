@@ -1,0 +1,57 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>30 Days of Voice Agents</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="page-header">
+    <div class="header-inner">
+      <h1 class="title">30 Days of Voice Agents</h1>
+      <p class="subtitle">Conversational Echo Bot — Speak, listen, continue</p>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <section class="bot-card">
+      <div class="bot-card-header">
+        <h2>Conversational Echo Bot</h2>
+        <div class="session-id">Session: <span id="sessionIdDisplay"></span></div>
+      </div>
+
+      <div class="bot-body">
+        <div class="controls-panel">
+          <div class="controls-box">
+            <div class="control-title">Controls</div>
+            <div class="btn-row">
+              <button id="startBtn" class="btn start">🎤 Start</button>
+              <button id="stopBtn" class="btn stop">⏹ Stop</button>
+            </div>
+
+            <div id="recordStatus" class="status">Idle</div>
+
+            <div class="playbacks">
+              <label class="small">Your Recording</label>
+              <audio id="recordedAudio" controls style="display:none;"></audio>
+
+              <label class="small">AI Response</label>
+              <audio id="aiAudio" controls style="display:none;"></audio>
+            </div>
+
+            <div class="note">Tip: The bot remembers previous messages in this session. Use the same session_id in the URL to continue a conversation.</div>
+          </div>
+        </div>
+
+        <div class="conversation-panel">
+          <div id="chatHistory" class="chat-history" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
