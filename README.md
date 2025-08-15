@@ -36,19 +36,47 @@ This bot listens to your voice, transcribes it, processes your request with an L
 ---
 
 ## 🏗️ Architecture
-    🎤 User Speaks
-            ↓ 
-    (Browser Microphone)[ MediaRecorder API in Browser ]
-            ↓
-🎧 Audio sent to Flask /agent/chat/<session_id>
-            ↓
-(1) 📜 STT via AssemblyAI → Transcript
-(2) 🤖 Gemini LLM → Generates AI Response
-(3) 🔊 Murf TTS → Converts Response to Speech
-            ↓
-📦 Flask stores and serves audio from /static
-            ↓
-🔁 Browser plays AI voice + updates conversation view
+   flowchart TD
+  %% Sections
+  subgraph Client[Client (Browser)]
+    Mic[🎤 Record audio (MediaRecorder)]
+    UI[🖥️ Conversation UI]
+  end
+
+  subgraph Server[Flask Server]
+    Route[/POST /agent/chat/<session_id>/]
+    Store[📦 Save MP3 to /static]
+    Hist[🗂️ In‑memory chat history]
+  end
+
+  subgraph Services[Service Layer]
+    STT[📜 STT: AssemblyAI]
+    LLM[🤖 LLM: Gemini]
+    TTS[🔊 TTS: Murf]
+  end
+
+  %% Flow
+  Mic -->|audio/webm| Route
+  UI -->|Start/Stop| Mic
+
+  %% (1) STT
+  Route -->|1) Transcribe| STT
+  STT -->|Transcript| Route
+
+  %% (2) LLM
+  Route -->|2) Prompt + History| LLM
+  LLM -->|AI Response Text| Route
+  Route --> Hist
+
+  %% (3) TTS
+  Route -->|3) Synthesize| TTS
+  TTS -->|MP3 bytes| Store
+  Store -->|/static/<file>.mp3| UI
+
+  %% Playback + UI update
+  UI -->|Play AI voice| UI
+  UI -->|Update chat view| UI
+
 
 
 ---
@@ -164,6 +192,7 @@ python app.py
 "response_text": "Bot reply",
 "audio_url": "/static/murf_s_1720000000000.mp3"
 }
+
 
 
 
