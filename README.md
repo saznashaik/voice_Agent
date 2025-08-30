@@ -1,4 +1,4 @@
-# 🎤 30 Days of Voice Agents — Conversational Echo Bot
+# 🎤 30 Days of Voice Agents — Conversational Echo Bot (ELSA)
 
 A real-time **voice agent** built with **Flask**, **AssemblyAI Speech-to-Text**, **Google Gemini LLM**, and **Murf.ai Text-to-Speech**.  
 This bot listens to your voice, transcribes it, processes your request with an LLM, and responds back with generated human-like speech — preserving conversation history.
