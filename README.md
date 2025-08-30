@@ -7,15 +7,22 @@ This bot listens to your voice, transcribes it, processes your request with an L
 
 ## 📌 Features
 
-- **Speech-to-Text (STT)** with [AssemblyAI](https://www.assemblyai.com/)  
-- **Conversational AI** with [Google Gemini](https://ai.google/google-gemini/)  
-- **Text-to-Speech (TTS)** with [Murf.ai](https://murf.ai/)  
-- **Persistent Conversation History** in memory (per `session_id`)  
-- Interactive **web interface** with start/stop recording controls  
-- **Fallback handling** if any API call fails (returns default audio + message)  
-- Automatic text shortening for TTS if over character limit  
-- Simple **REST API** to use from other clients
-
+- **Real-time voice interaction** via AssemblyAI STT.
+- **Elsa persona (Frozen)** using Gemini LLM:
+  - Speaks elegantly and empathetically.
+  - Avoids verbatim copyrighted lyrics.
+- **TTS** with Murf AI streamed directly to speakers.
+- **Web context & news integration**:
+  - Fetches relevant web results via Tavily.
+  - Retrieves latest news headlines.
+- **Flask-based UI** with:
+  - Start/Stop recording buttons.
+  - API key configuration modal.
+  - Live chat display with user and Elsa messages.
+- **Persistent conversation history** (per `session_id`) stored in JSONL.
+- **Fallback handling** if any API fails (returns default audio + message).
+- Automatic text shortening for TTS if over character limit.
+- Simple **REST API** for other clients.
 ---
 
 ## 🛠️ Tech Stack
@@ -57,7 +64,8 @@ This bot listens to your voice, transcribes it, processes your request with an L
 
     voice_agent_app/
     │
-    ├── app.py                  # Flask app entry
+    ├── app.py 
+    ├── streaming_app.py          #for streaming
     ├── config.py               # API keys, folder paths
     ├── schemas/                # Pydantic request/response models
     │   ├── __init__.py
@@ -82,6 +90,33 @@ This bot listens to your voice, transcribes it, processes your request with an L
 
 
 ---
+⚡ Key Components
+
+    | Component              | Description                                                    |
+    | ---------------------- | -------------------------------------------------------------- |
+    | **AssemblyAIRealtime** | Streams microphone input and returns live transcripts.         |
+    | **GeminiLLM**          | Generates Elsa persona responses, streaming output chunk-wise. |
+    | **MurfStreamer**       | Converts text chunks to TTS audio streamed to speakers.        |
+    | **RelayServer**        | WebSocket relay to broadcast messages/audio to browser.        |
+    | **VoiceAgent**         | Coordinates STT → LLM → TTS pipeline and handles chat history. |
+    | **Flask UI**           | Web interface with recording, API keys, and chat display.      |
+
+🙏 Acknowledgements
+
+    AssemblyAI
+     — Realtime STT
+    
+    Google Gemini
+     — LLM API
+    
+    Murf
+     — TTS
+    
+    Tavily
+     — Web search API
+    
+    NewsAPI
+     — Latest news
 
 ## 🔑 Environment Variables
 
@@ -89,7 +124,8 @@ This bot listens to your voice, transcribes it, processes your request with an L
         ASSEMBLYAI_API_KEY=your_assemblyai_api_key
         MURF_API_KEY=your_murf_api_key
         GEMINI_API_KEY=your_gemini_api_key
-
+        TAVILY_API_KEY=your_tavily_key
+        NEWS_API_KEY=your_news_key
 
 Make sure you have valid API keys for all three services.
 
@@ -122,6 +158,13 @@ Make sure you have valid API keys for all three services.
         python app.py
 
 
+    Access: http://localhost:5000
+    
+    Start recording with Start Recording button.
+    
+    Stop recording with Stop Recording.
+    
+    Configure API keys anytime via ⚙️.
 ---
 
 ## 📡 API Endpoints
